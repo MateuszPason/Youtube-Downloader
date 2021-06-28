@@ -25,6 +25,11 @@ class DownloadingComponent(QDialog):
             user_link = self.source.text()
             yt = YouTube(user_link)
             folder_path = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder')
+
+            # Print information about video
+            self.length.setText('Duration: ' + time.strftime('%H:%M:%S', time.gmtime(yt.length)))
+            self.title.setText(yt.title)
+
             if selected_format == 'MP3':
                 self.download(folder_path, yt)
                 self.convert(folder_path, yt)
@@ -34,18 +39,18 @@ class DownloadingComponent(QDialog):
             print('invalid link')
 
     def download(self, folder_path, yt):
-        # print('Duration: ' + time.strftime('%H:%M:%S', time.gmtime(yt.length)))
-
         to_download = yt.streams.get_highest_resolution()
-        video_to_convert = VideoFileClip(to_download.download(folder_path + '/'))
+        VideoFileClip(to_download.download(folder_path + '/'))
 
     def convert(self, folder_path, yt):
         video_to_convert = VideoFileClip(folder_path + '/' + delete_illegal_chars(yt.title) + '.mp4')
-        video_to_convert.audio.write_audiofile(os.path.join(folder_path + '/' + delete_illegal_chars(yt.title) + '.mp3'))
+        video_to_convert.audio.write_audiofile(os.path.join(folder_path + '/' + delete_illegal_chars(yt.title) +
+                                                            '.mp3'))
         # Delete video after conversion
         video_to_convert.close()
         path_to_delete_file = folder_path + '/' + delete_illegal_chars(yt.title) + '.mp4'
         os.remove(path_to_delete_file)
+
 
 def main():
     app = QApplication(sys.argv)
@@ -56,9 +61,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-"""
-try:
-    convert_and_download()
-except:
-    print('Invalid link')
-"""
