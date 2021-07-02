@@ -36,22 +36,24 @@ class DownloadingComponent(QDialog):
             to_download = yt.streams.get_highest_resolution()
             VideoFileClip(to_download.download(folder_path + '/'))
 
-            video_to_convert = VideoFileClip(folder_path + '/' + delete_illegal_chars(yt.title) + '.mp4')
-            video_to_convert.audio.write_audiofile(os.path.join(folder_path + '/' + delete_illegal_chars(yt.title) +
-                                                                '.mp3'))
+            cleared_title = delete_illegal_chars(yt.title)
+            path_to_video = folder_path + '/' + cleared_title + '.mp4'
+            video_to_convert = VideoFileClip(path_to_video)
+            video_to_convert.audio.write_audiofile(os.path.join(folder_path + '/' + cleared_title + '.mp3'))
 
             # Print information about downloaded file
             self.completed_info.setText('Completed: ')
             self.length.setText('Duration: ' + time.strftime('%H:%M:%S', time.gmtime(yt.length)))
             self.title_and_download_info.setText(yt.title)
 
-            self.delete_file(video_to_convert, folder_path, yt)
+            self.delete_file(video_to_convert, path_to_video)
+
         except pytube.exceptions.RegexMatchError:
             self.title_and_download_info.setText('Invalid link')
 
-    def delete_file(self, file_to_delete, path, yt):
+    def delete_file(self, file_to_delete, path):
         file_to_delete.close()
-        os.remove(path + '/' + delete_illegal_chars(yt.title) + '.mp4')
+        os.remove(path)
 
 
 def main():
