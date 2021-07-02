@@ -1,9 +1,11 @@
-from pytube import YouTube
+from pytube import YouTube, exceptions
 from moviepy.editor import *
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QDialog
 from PyQt5.uic import loadUi
 import time
+import pytube
+import os
 
 
 def delete_illegal_chars(filename):
@@ -21,35 +23,35 @@ class DownloadingComponent(QDialog):
 
     def choose_dir_and_download(self):
         try:
-            selected_format = self.format.currentText()
             user_link = self.source.text()
             yt = YouTube(user_link)
+
+            # Inform about that file is downloading
+            self.completed_info.setText('')
+            self.length.setText('')
+            self.title_and_download_info.setText('Downloading')
+
             folder_path = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder')
 
-            # Print information about video
+            to_download = yt.streams.get_highest_resolution()
+            VideoFileClip(to_download.download(folder_path + '/'))
+
+            video_to_convert = VideoFileClip(folder_path + '/' + delete_illegal_chars(yt.title) + '.mp4')
+            video_to_convert.audio.write_audiofile(os.path.join(folder_path + '/' + delete_illegal_chars(yt.title) +
+                                                                '.mp3'))
+
+            # Print information about downloaded file
+            self.completed_info.setText('Completed: ')
             self.length.setText('Duration: ' + time.strftime('%H:%M:%S', time.gmtime(yt.length)))
-            self.title.setText(yt.title)
+            self.title_and_download_info.setText(yt.title)
 
-            if selected_format == 'MP3':
-                self.download(folder_path, yt)
-                self.convert(folder_path, yt)
-            else:
-                self.download(folder_path, yt)
-        except:
-            print('invalid link')
+            self.delete_file(video_to_convert, folder_path, yt)
+        except pytube.exceptions.RegexMatchError:
+            self.title_and_download_info.setText('Invalid link')
 
-    def download(self, folder_path, yt):
-        to_download = yt.streams.get_highest_resolution()
-        VideoFileClip(to_download.download(folder_path + '/'))
-
-    def convert(self, folder_path, yt):
-        video_to_convert = VideoFileClip(folder_path + '/' + delete_illegal_chars(yt.title) + '.mp4')
-        video_to_convert.audio.write_audiofile(os.path.join(folder_path + '/' + delete_illegal_chars(yt.title) +
-                                                            '.mp3'))
-        # Delete video after conversion
-        video_to_convert.close()
-        path_to_delete_file = folder_path + '/' + delete_illegal_chars(yt.title) + '.mp4'
-        os.remove(path_to_delete_file)
+    def delete_file(self, file_to_delete, path, yt):
+        file_to_delete.close()
+        os.remove(path + '/' + delete_illegal_chars(yt.title) + '.mp4')
 
 
 def main():
