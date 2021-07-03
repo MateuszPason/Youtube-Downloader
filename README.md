@@ -6,7 +6,7 @@ Youtube-Downloader helps to download two types of files from YouTube: MP3 and MP
 Technologies:
 </h2>
 - Python 3.9<br />
-- pytube<br />
+- pytube 10.8.5<br />
 - PyQt5 5.15.4<br />
 - moviepy 1.0.3<br />
 
