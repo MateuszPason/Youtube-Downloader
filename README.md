@@ -3,9 +3,13 @@
 Youtube-Downloader helps to download two types of files from YouTube: MP3 and MP4. Paste YouTube URL to the input field and press download.
 
 <h2>
-Technology:
+Technologies:
 </h2>
-Python 3.9
+- Python 3.9<br />
+- pytube<br />
+- PyQt5 5.15.4<br />
+- moviepy 1.0.3<br />
+
 
 <h2>
 Installation
@@ -16,7 +20,10 @@ Use the package manager pip to install required Python Packages:
 - pip install PyQt5<br />
 - pip install moviepy<br />
 
-<h2>
-App interface
+<h2> 
+App interface 
 </h2>
-![interface](/interface/interface_screenshot.png?raw=true)
+
+<p align="center">
+<img src="/interface/interface_screenshot.png">
+</p>
