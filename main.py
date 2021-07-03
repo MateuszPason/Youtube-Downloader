@@ -1,11 +1,12 @@
 from pytube import YouTube, exceptions
-from moviepy.editor import *
+from moviepy.video.io.VideoFileClip import VideoFileClip
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QDialog
 from PyQt5.uic import loadUi
 import time
 import pytube
 import os
+import sys
 
 
 def delete_illegal_chars(filename):
