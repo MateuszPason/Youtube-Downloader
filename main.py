@@ -9,13 +9,6 @@ import os
 import sys
 
 
-def delete_illegal_chars(filename):
-    illegal_chars = [':', '/', '*', '"', '<', '>', '|', '.', '\'']
-    for i in illegal_chars:
-        filename = filename.replace(i, '')
-    return filename
-
-
 class DownloadingComponent(QDialog):
     def __init__(self):
         super(DownloadingComponent, self).__init__()
