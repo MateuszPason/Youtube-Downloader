@@ -25,6 +25,7 @@ class DownloadingComponent(QDialog):
         try:
             user_link = self.source.text()
             yt = YouTube(user_link)
+            file_type = self.file_type.currentText()
 
             # Inform about that file is downloading
             self.completed_info.setText('')
@@ -33,12 +34,18 @@ class DownloadingComponent(QDialog):
 
             folder_path = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder')
 
-            to_download = yt.streams.filter(only_audio=True).first()
-
-            out_file = to_download.download(output_path=folder_path)
-            base, ext = os.path.splitext(out_file)
-            new_file = base + '.mp3'
-            os.rename(out_file, new_file)
+            if file_type == 'MP3':
+                to_download = yt.streams.filter(only_audio=True).first()
+                out_file = to_download.download(output_path=folder_path)
+                base, ext = os.path.splitext(out_file)
+                new_file = base + '.mp3'
+                os.rename(out_file, new_file)
+            else:
+                if yt.streams.get_by_itag(137) is not None:
+                    to_download_video = yt.streams.get_by_itag(137)
+                else:
+                    to_download_video = yt.streams.get_highest_resolution()
+                VideoFileClip(to_download_video.download(folder_path + '/'))
 
             # Print information about downloaded file
             self.completed_info.setText('Completed: ')
