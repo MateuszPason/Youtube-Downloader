@@ -13,6 +13,7 @@ class DownloadingComponent(QDialog):
     def __init__(self):
         super(DownloadingComponent, self).__init__()
         self.ui = loadUi("interface/mainWindow.ui", self)
+        self.setWindowTitle('Down_YT')
         self.pushButton.clicked.connect(self.choose_dir_and_download)
 
     def choose_dir_and_download(self):
