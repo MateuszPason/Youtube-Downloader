@@ -33,27 +33,20 @@ class DownloadingComponent(QDialog):
 
             folder_path = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder')
 
-            to_download = yt.streams.get_highest_resolution()
-            VideoFileClip(to_download.download(folder_path + '/'))
+            to_download = yt.streams.filter(only_audio=True).first()
 
-            cleared_title = delete_illegal_chars(yt.title)
-            path_to_video = folder_path + '/' + cleared_title + '.mp4'
-            video_to_convert = VideoFileClip(path_to_video)
-            video_to_convert.audio.write_audiofile(os.path.join(folder_path + '/' + cleared_title + '.mp3'))
+            out_file = to_download.download(output_path=folder_path)
+            base, ext = os.path.splitext(out_file)
+            new_file = base + '.mp3'
+            os.rename(out_file, new_file)
 
             # Print information about downloaded file
             self.completed_info.setText('Completed: ')
             self.length.setText('Duration: ' + time.strftime('%H:%M:%S', time.gmtime(yt.length)))
             self.title_and_download_info.setText(yt.title)
 
-            self.delete_file(video_to_convert, path_to_video)
-
         except pytube.exceptions.RegexMatchError:
             self.title_and_download_info.setText('Invalid link')
-
-    def delete_file(self, file_to_delete, path):
-        file_to_delete.close()
-        os.remove(path)
 
 
 def main():
