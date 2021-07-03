@@ -30,7 +30,7 @@ class DownloadingComponent(QDialog):
             # Inform about that file is downloading
             self.completed_info.setText('')
             self.length.setText('')
-            self.title_and_download_info.setText('Downloading')
+            self.title_and_download_info.setText('Downloading...')
 
             folder_path = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder')
 
@@ -41,6 +41,7 @@ class DownloadingComponent(QDialog):
                 new_file = base + '.mp3'
                 os.rename(out_file, new_file)
             else:
+                # if resolution 1080p is available download it, otherwise download the highest available resolution
                 if yt.streams.get_by_itag(137) is not None:
                     to_download_video = yt.streams.get_by_itag(137)
                 else:
