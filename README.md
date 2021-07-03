@@ -19,3 +19,4 @@ Use the package manager pip to install required Python Packages:
 <h2>
 App interface
 </h2>
+![interface](/interface/interface_screenshot.png?raw=true)
