@@ -8,7 +8,6 @@ Technologies:
 - Python 3.9<br />
 - pytube 10.8.5<br />
 - PyQt5 5.15.4<br />
-- moviepy 1.0.3<br />
 
 
 <h2>
@@ -18,7 +17,6 @@ Use the package manager pip to install required Python Packages:
 <br />
 - pip install pytube<br />
 - pip install PyQt5<br />
-- pip install moviepy<br />
 
 <h2> 
 App interface 
