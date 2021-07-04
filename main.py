@@ -1,5 +1,4 @@
 from pytube import YouTube, exceptions
-from moviepy.video.io.VideoFileClip import VideoFileClip
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QDialog
 from PyQt5.uic import loadUi
@@ -36,12 +35,8 @@ class DownloadingComponent(QDialog):
                 new_file = base + '.mp3'
                 os.rename(out_file, new_file)
             else:
-                # if resolution 1080p is available download it, otherwise download the highest available resolution
-                if yt.streams.get_by_itag(137) is not None:
-                    to_download_video = yt.streams.get_by_itag(137)
-                else:
-                    to_download_video = yt.streams.get_highest_resolution()
-                VideoFileClip(to_download_video.download(folder_path + '/'))
+                to_download_video = yt.streams.get_highest_resolution()
+                to_download_video.download(folder_path + '/')
 
             # Print information about downloaded file
             self.completed_info.setText('Completed: ')
